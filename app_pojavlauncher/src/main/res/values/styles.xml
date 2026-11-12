@@ -20,7 +20,10 @@
     </style>
 
     <style name="LauncherMenuButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:background">@drawable/zyro_menu_button</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">@dimen/_52sdp</item>
     </style>
 
     <style name="LauncherMenuButton.Universal" parent="LauncherMenuButton">
