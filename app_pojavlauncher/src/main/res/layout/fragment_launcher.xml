@@ -38,15 +38,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_19sdp"
-                android:layout_marginTop="@dimen/_1sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_19sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:text="JAVA EDITION  •  YOUR WORLD, YOUR RULES"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/_8ssp"
                 android:letterSpacing="0.08"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/zyro_brand"
-                app:layout_constraintBottom_toBottomOf="@id/zyro_brand" />
+                app:layout_constraintTop_toBottomOf="@id/zyro_brand" />
 
             <View
                 android:id="@+id/zyro_accent_line"
@@ -56,7 +55,7 @@
                 android:layout_marginTop="@dimen/_7sdp"
                 android:background="@color/zyro_accent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/zyro_brand" />
+                app:layout_constraintTop_toBottomOf="@id/zyro_tagline" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/center_guideline"
