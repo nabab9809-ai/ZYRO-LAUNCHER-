@@ -15,4 +15,5 @@
     <color name="zyro_surface">#241316</color>
     <color name="zyro_crimson">#B51224</color>
     <color name="zyro_accent">#FF3048</color>
+    <color name="zyro_ripple">#55FF3048</color>
 </resources>
