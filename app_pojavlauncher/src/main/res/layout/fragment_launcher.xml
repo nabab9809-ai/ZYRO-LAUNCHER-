@@ -38,7 +38,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_19sdp"
-                android:layout_marginStart="@dimen/_19sdp"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:text="JAVA EDITION  •  YOUR WORLD, YOUR RULES"
                 android:textColor="@color/secondary_text"
