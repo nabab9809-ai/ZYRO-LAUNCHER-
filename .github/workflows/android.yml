@@ -102,12 +102,12 @@ jobs:
           mv app_pojavlauncher/build/outputs/apk/release/app_pojavlauncher-release.apk out/app-release.apk
 
       - name: Gen release md5sum
-        if: success()
+        if: hashFiles('out/app-release.apk') != ''
         run: |
           md5sum out/app-release.apk > out/app-release.md5
 
       - name: Upload release APK
-        if: success()
+        if: hashFiles('out/app-release.apk') != ''
         uses: actions/upload-artifact@v4
         with:
           name: app-release
