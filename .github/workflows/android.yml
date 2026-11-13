@@ -102,6 +102,9 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             third_party/horizon/target
+            third_party/horizon/.local/horizon-client
+            third_party/horizon/.local/android/engine-data-generated.zip
+            third_party/horizon/.local/android/engine-data-generated.fingerprint
           key: zyro-horizon-android-arm64-${{ runner.os }}-${{ hashFiles('third_party/horizon/Cargo.lock', 'third_party/horizon/rust-toolchain.toml') }}-${{ github.sha }}
           restore-keys: |
             zyro-horizon-android-arm64-${{ runner.os }}-${{ hashFiles('third_party/horizon/Cargo.lock', 'third_party/horizon/rust-toolchain.toml') }}-
@@ -114,7 +117,12 @@ jobs:
       - name: Prepare public Horizon engine data
         working-directory: third_party/horizon
         run: |
-          python3 tools/android_prepare.py
+          VERSION=$(python3 -c 'import json; print(json.load(open("research-lock.json"))["minecraft"]["version"])')
+          if test -s ".local/horizon-client/$VERSION/horizon-resources.json"; then
+            echo "Using cached generated Horizon data for Minecraft $VERSION"
+          else
+            python3 tools/android_prepare.py
+          fi
 
       - name: Compile and package Horizon into ZYRO
         working-directory: third_party/horizon
