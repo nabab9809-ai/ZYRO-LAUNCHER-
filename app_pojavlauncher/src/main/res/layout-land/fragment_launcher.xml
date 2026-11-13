@@ -69,6 +69,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zyro_profiles_title" />
 
+    <TextView
+        android:id="@+id/zyro_create_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_18sdp"
+        android:background="@drawable/zyro_click_feedback"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:paddingStart="@dimen/_12sdp"
+        android:paddingEnd="@dimen/_12sdp"
+        android:text="+ CREATE PROFILE"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/_9ssp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.05"
+        app:layout_constraintTop_toTopOf="@id/zyro_profiles_title"
+        app:layout_constraintBottom_toBottomOf="@id/zyro_profiles_title"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.kdt.mcgui.mcVersionSpinner
         android:id="@+id/mc_version_spinner"
         android:layout_width="0dp"
@@ -77,6 +97,8 @@
         android:layout_marginTop="@dimen/_14sdp"
         android:layout_marginEnd="@dimen/_18sdp"
         android:background="@drawable/zyro_profile_selector"
+        android:clickable="true"
+        android:focusable="true"
         android:drawableEnd="@drawable/spinner_arrow"
         android:drawablePadding="@dimen/_10sdp"
         android:elevation="2dp"
