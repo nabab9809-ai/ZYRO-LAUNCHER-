@@ -131,6 +131,16 @@ jobs:
           gradle :app_pojavlauncher:assembleDebug
           mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug.apk
 
+      - name: Verify Horizon runtime inside debug APK
+        run: |
+          unzip -Z1 out/app-debug.apk | grep -Fx 'lib/arm64-v8a/libhorizon_android.so'
+          unzip -Z1 out/app-debug.apk | grep -Fx 'assets/engine-data.zip'
+          unzip -p out/app-debug.apk assets/engine-data.zip > out/engine-data-check.zip
+          unzip -t out/engine-data-check.zip
+          unzip -p out/app-debug.apk lib/arm64-v8a/libhorizon_android.so > out/horizon-check.so
+          readelf -h out/horizon-check.so | grep -F 'Machine:                           AArch64'
+          rm out/engine-data-check.zip out/horizon-check.so
+
       - name: Gen debug md5sum
         run: |
           md5sum out/app-debug.apk > out/app-debug.md5
