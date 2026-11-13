@@ -36,6 +36,7 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.profiles.ProfileIconCache;
 import net.kdt.pojavlaunch.profiles.VersionSelectorDialog;
 import net.kdt.pojavlaunch.utils.CropperUtils;
+import net.kdt.pojavlaunch.value.launcherprofiles.GameEngine;
 import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
 import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
@@ -54,7 +55,7 @@ public class ProfileEditorFragment extends Fragment implements CropperUtils.Crop
     private MinecraftProfile mTempProfile = null;
     private String mValueToConsume = "";
     private Button mSaveButton, mDeleteButton, mControlSelectButton, mGameDirButton, mVersionSelectButton;
-    private Spinner mDefaultRuntime, mDefaultRenderer;
+    private Spinner mDefaultRuntime, mDefaultRenderer, mDefaultEngine;
     private CheckBox mUseANGLE;
     private EditText mDefaultName, mDefaultJvmArgument;
     private TextView mDefaultPath, mDefaultVersion, mDefaultControl;
@@ -88,6 +89,8 @@ public class ProfileEditorFragment extends Fragment implements CropperUtils.Crop
 
         Tools.RenderersList renderersList = Tools.getCompatibleRenderers(view.getContext());
         mRenderNames = renderersList.rendererIds;
+        mDefaultEngine.setAdapter(new ArrayAdapter<>(requireContext(), R.layout.item_simple_list_1,
+                Arrays.asList(getString(R.string.profile_engine_java), getString(R.string.profile_engine_rust))));
         List<String> renderList = new ArrayList<>(renderersList.rendererDisplayNames.length + 1);
         renderList.addAll(Arrays.asList(renderersList.rendererDisplayNames));
         renderList.add(view.getContext().getString(R.string.global_default));
@@ -197,6 +200,7 @@ public class ProfileEditorFragment extends Fragment implements CropperUtils.Crop
         mDefaultRenderer.setSelection(rendererIndex);
 
         mDefaultVersion.setText(mTempProfile.lastVersionId);
+        mDefaultEngine.setSelection(GameEngine.isRust(mTempProfile.gameEngine) ? 1 : 0);
         mDefaultJvmArgument.setText(mTempProfile.javaArgs == null ? "" : mTempProfile.javaArgs);
         mDefaultName.setText(mTempProfile.name);
         mDefaultPath.setText(mTempProfile.gameDir == null ? "" : mTempProfile.gameDir);
@@ -234,6 +238,7 @@ public class ProfileEditorFragment extends Fragment implements CropperUtils.Crop
         mDefaultRenderer = view.findViewById(R.id.vprof_editor_profile_renderer);
         mUseANGLE = view.findViewById(R.id.vprof_editor_profile_angle);
         mDefaultVersion = view.findViewById(R.id.vprof_editor_version_spinner);
+        mDefaultEngine = view.findViewById(R.id.vprof_editor_engine_spinner);
 
         mDefaultPath = view.findViewById(R.id.vprof_editor_path);
         mDefaultName = view.findViewById(R.id.vprof_editor_profile_name);
@@ -250,6 +255,7 @@ public class ProfileEditorFragment extends Fragment implements CropperUtils.Crop
     private void save(){
         //First, check for potential issues in the inputs
         mTempProfile.lastVersionId = mDefaultVersion.getText().toString();
+        mTempProfile.gameEngine = mDefaultEngine.getSelectedItemPosition() == 1 ? GameEngine.RUST : GameEngine.JAVA;
         mTempProfile.controlFile = mDefaultControl.getText().toString();
         mTempProfile.name = mDefaultName.getText().toString();
         mTempProfile.javaArgs = mDefaultJvmArgument.getText().toString()
