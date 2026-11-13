@@ -113,11 +113,11 @@ jobs:
           CARGO_TARGET_DIR: ${{ github.workspace }}/third_party/horizon/target
           CARGO_BUILD_JOBS: '2'
         run: |
-          python3 tools/android_build.py --abi arm64-v8a --rust-only --public --profile release \\
-            --sdk "$ANDROID_HOME" --java-home "$JAVA_HOME" --ndk-version 28.2.13676358 \\
+          python3 tools/android_build.py --abi arm64-v8a --rust-only --public --profile release \
+            --sdk "$ANDROID_HOME" --java-home "$JAVA_HOME" --ndk-version 28.2.13676358 \
             --build-tools-version 35.0.0
           mkdir -p ../app_pojavlauncher/src/main/jniLibs/arm64-v8a
-          cp target/aarch64-linux-android/release/libhorizon_android.so \\
+          cp target/aarch64-linux-android/release/libhorizon_android.so \
             ../app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so
           cd ..
           python3 -c 'import runpy, shutil; f=runpy.run_path("third_party/horizon/tools/android_build.py"); shutil.copyfile(f["engine_data"](True), "app_pojavlauncher/src/main/assets/engine-data.zip")'
