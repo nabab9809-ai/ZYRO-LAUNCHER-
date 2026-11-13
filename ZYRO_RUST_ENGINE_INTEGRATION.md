@@ -1,6 +1,6 @@
 # ZYRO Rust Engine Integration
 
-Status: profile-level backend metadata is committed; no Rust engine is wired into the APK yet.
+Status: profile-level backend metadata is committed and the Horizon Android packaging has been audited; the Rust runtime is not yet present in the ZYRO APK.
 
 ## Target
 
@@ -61,6 +61,33 @@ Android branch: `android`
       settings without conflating them with Java instances.
 - [ ] Build, install and test on physical devices; publish only after runtime
       validation.
+
+## Packaging audit findings
+
+The Horizon Android port is a complete Android application, not a drop-in
+Rust library. Its Android packaging currently declares:
+
+- A dedicated `dev.horizon.android.HorizonActivity` with the
+  `android.app.lib_name=horizon_android` native entry point.
+- A `HorizonDocumentsProvider`, game theme, drawable resources and Java
+  wrapper classes that must be merged or adapted.
+- A native `libhorizon_android.so` plus generated `engine-data.zip` and
+  control assets staged by its Android build script.
+- A separate Gradle application configuration (AGP 8.11.1, compile SDK 35,
+  min SDK 28 by default).
+
+ZYRO currently has one Android application module, AGP 9.3.1, compile SDK 37
+and min SDK 21. Therefore, adding only the Rust shared library or including
+Horizon as a second application module would not integrate it into the
+installed ZYRO app. The correct next step is to vendor the upstream Android
+source with its license/notices, adapt its Activity/provider/resources into
+ZYRO's existing app module, and connect the native build/staging pipeline.
+Rust availability must be disabled below API 28 and for unsupported ABIs;
+Java remains the fallback.
+
+The source audit also confirms that Horizon targets Minecraft Java 26.3 and
+uses its own native `.hmod` mods and resource/world storage. It cannot be
+treated as a replacement renderer for arbitrary Java profiles.
 
 ## Important distinction
 
