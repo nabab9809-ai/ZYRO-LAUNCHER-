@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,7 +7,13 @@
     android:layout_height="match_parent"
     android:background="@color/background_app">
 
-    <!-- Persistent ZYRO navigation rail. Existing fragment and launcher IDs are preserved. -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/zyro_content_split"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.68" />
+
     <LinearLayout
         android:id="@+id/zyro_navigation_rail"
         android:layout_width="76dp"
@@ -73,24 +80,37 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/progress_layout" />
 
-    <com.kdt.mcgui.mcAccountSpinner
-        android:id="@+id/account_spinner"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_42sdp"
-        android:dropDownWidth="wrap_content"
-        android:dropDownVerticalOffset="@dimen/_42sdp"
-        android:background="@color/background_status_bar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/zyro_rail_divider"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+    <!-- Main profile area. Existing fragment host and profile actions are preserved. -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_fragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toEndOf="@id/zyro_rail_divider"
+        app:layout_constraintEnd_toStartOf="@id/zyro_content_split"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progress_layout" />
+
+    <!-- Existing account spinner keeps Microsoft/offline authentication and account selection intact. -->
+    <com.kdt.mcgui.mcAccountSpinner
+        android:id="@+id/account_spinner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:dropDownWidth="wrap_content"
+        android:background="@color/zyro_surface"
+        app:layout_constraintStart_toStartOf="@id/zyro_content_split"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/account_spinner"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progress_layout" />
+
+    <View
+        android:id="@+id/zyro_account_panel_border"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/divider"
+        app:layout_constraintStart_toStartOf="@id/zyro_content_split"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/progress_layout" />
 
     <com.kdt.mcgui.ProgressLayout
