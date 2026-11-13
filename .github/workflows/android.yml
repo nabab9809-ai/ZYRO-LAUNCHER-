@@ -103,6 +103,7 @@ jobs:
             zyro-horizon-android-arm64-${{ runner.os }}-${{ hashFiles('third_party/horizon/Cargo.lock', 'third_party/horizon/rust-toolchain.toml') }}-
 
       - name: Prepare public Horizon engine data
+        working-directory: third_party/horizon
         run: |
           python3 tools/android_prepare.py
 
