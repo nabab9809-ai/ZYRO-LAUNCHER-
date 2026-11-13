@@ -133,14 +133,26 @@ jobs:
           python3 tools/android_build.py --abi arm64-v8a --rust-only --public --profile release \
             --sdk "$ANDROID_HOME" --java-home "$JAVA_HOME" --ndk-version 28.2.13676358 \
             --build-tools-version 35.0.0
-          mkdir -p ../app_pojavlauncher/src/main/jniLibs/arm64-v8a
+          mkdir -p "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/jniLibs/arm64-v8a"
           cp target/aarch64-linux-android/release/libhorizon_android.so \
-            ../app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so
-          cd ..
-          python3 -c 'import runpy, shutil; f=runpy.run_path("third_party/horizon/tools/android_build.py"); shutil.copyfile(f["engine_data"](True), "app_pojavlauncher/src/main/assets/engine-data.zip")'
-          test -s app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so
-          test -s app_pojavlauncher/src/main/assets/engine-data.zip
-          sha256sum app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so app_pojavlauncher/src/main/assets/engine-data.zip
+            "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so"
+          mkdir -p "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets"
+          python3 - <<'PY'
+          import os
+          import runpy
+          import shutil
+          from pathlib import Path
+
+          workspace = Path(os.environ["GITHUB_WORKSPACE"])
+          build = runpy.run_path("tools/android_build.py")
+          shutil.copyfile(
+              build["engine_data"](True),
+              workspace / "app_pojavlauncher/src/main/assets/engine-data.zip",
+          )
+          PY
+          test -s "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so"
+          test -s "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/engine-data.zip"
+          sha256sum "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so" "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/engine-data.zip"
 
       - name: Build Debug .apk
         run: |
