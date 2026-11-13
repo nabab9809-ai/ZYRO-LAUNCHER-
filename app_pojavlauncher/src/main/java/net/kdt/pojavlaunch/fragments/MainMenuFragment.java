@@ -58,6 +58,9 @@ public class MainMenuFragment extends Fragment {
         ImageButton mEditProfileButton = view.findViewById(R.id.edit_profile_button);
         Button mPlayButton = view.findViewById(R.id.play_button);
         mVersionSpinner = view.findViewById(R.id.mc_version_spinner);
+        View createProfileButton = view.findViewById(R.id.zyro_create_profile);
+        createProfileButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(),
+                ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
 
         mNewsButton.setOnClickListener(v -> Tools.openURL(requireActivity(), Tools.URL_HOME));
         mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.discord_invite)));
