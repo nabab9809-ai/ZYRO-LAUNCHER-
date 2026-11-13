@@ -12,6 +12,8 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -61,6 +63,39 @@ public class MainMenuFragment extends Fragment {
         View createProfileButton = view.findViewById(R.id.zyro_create_profile);
         createProfileButton.setOnClickListener(v -> Tools.swapFragment(requireActivity(),
                 ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
+
+        // Subtle ZYRO entrance motion; keep it short so the launcher still feels responsive.
+        View[] entranceViews = {
+                view.findViewById(R.id.zyro_brand),
+                view.findViewById(R.id.zyro_tagline),
+                view.findViewById(R.id.zyro_profiles_title),
+                view.findViewById(R.id.zyro_profiles_hint),
+                createProfileButton,
+                mVersionSpinner,
+                view.findViewById(R.id.edit_profile_button),
+                mPlayButton
+        };
+        for (int i = 0; i < entranceViews.length; i++) {
+            View item = entranceViews[i];
+            if (item == null) continue;
+            item.setAlpha(0f);
+            item.setTranslationY(10f);
+            item.animate().alpha(1f).translationY(0f)
+                    .setStartDelay(i * 35L)
+                    .setDuration(260)
+                    .setInterpolator(new DecelerateInterpolator())
+                    .start();
+        }
+        mPlayButton.setOnTouchListener((v, event) -> {
+            if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                v.animate().scaleX(0.975f).scaleY(0.96f).setDuration(90).start();
+            } else if (event.getAction() == android.view.MotionEvent.ACTION_UP
+                    || event.getAction() == android.view.MotionEvent.ACTION_CANCEL) {
+                v.animate().scaleX(1f).scaleY(1f).setDuration(180)
+                        .setInterpolator(new OvershootInterpolator(1.5f)).start();
+            }
+            return false;
+        });
 
         mNewsButton.setOnClickListener(v -> Tools.openURL(requireActivity(), Tools.URL_HOME));
         mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.discord_invite)));
