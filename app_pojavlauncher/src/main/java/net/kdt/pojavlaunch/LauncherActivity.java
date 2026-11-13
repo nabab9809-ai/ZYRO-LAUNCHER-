@@ -66,6 +66,8 @@ import net.kdt.pojavlaunch.utils.DateUtils;
 import net.kdt.pojavlaunch.utils.NotificationUtils;
 import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
 import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
+import net.kdt.pojavlaunch.value.launcherprofiles.GameEngine;
+import net.kdt.pojavlaunch.rust.RustEngineLauncher;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -188,7 +190,19 @@ public class LauncherActivity extends BaseActivity {
             return false;
         }
         MinecraftProfile prof = LauncherProfiles.mainProfileJson.profiles.get(selectedProfile);
-        if (prof == null || prof.lastVersionId == null || "Unknown".equals(prof.lastVersionId)){
+        if (prof == null) {
+            Toast.makeText(this, R.string.error_no_version, Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        // Rust profiles use Horizon's own Minecraft 26.3 runtime and account flow.
+        // Dispatch before Java-version/account validation so Java profile data is untouched.
+        if (GameEngine.isRust(prof.gameEngine)) {
+            RustEngineLauncher.launch(this);
+            return false;
+        }
+
+        if (prof.lastVersionId == null || "Unknown".equals(prof.lastVersionId)) {
             Toast.makeText(this, R.string.error_no_version, Toast.LENGTH_LONG).show();
             return false;
         }
