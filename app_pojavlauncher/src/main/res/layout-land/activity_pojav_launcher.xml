@@ -124,19 +124,49 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/progress_layout" />
 
-    <!-- Existing account spinner keeps Microsoft/offline authentication and account selection intact. -->
+    <!-- Account panel keeps the real account spinner and its built-in player-head preview. -->
+    <TextView
+        android:id="@+id/zyro_account_heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="22dp"
+        android:text="PLAYER ACCOUNT"
+        android:textColor="@color/primary_text"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.06"
+        app:layout_constraintStart_toStartOf="@id/zyro_content_split"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/zyro_account_hint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:text="Microsoft or offline account"
+        android:textColor="@color/secondary_text"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@id/zyro_content_split"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/zyro_account_heading" />
+
     <com.kdt.mcgui.mcAccountSpinner
         android:id="@+id/account_spinner"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="center"
+        android:layout_height="64dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="14dp"
+        android:gravity="center_vertical"
         android:padding="@dimen/_10sdp"
         android:dropDownWidth="wrap_content"
         android:background="@color/zyro_surface"
         app:layout_constraintStart_toStartOf="@id/zyro_content_split"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/progress_layout" />
+        app:layout_constraintTop_toBottomOf="@id/zyro_account_hint" />
 
     <View
         android:id="@+id/zyro_account_panel_border"
