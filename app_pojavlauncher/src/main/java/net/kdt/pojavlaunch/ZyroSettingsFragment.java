@@ -105,7 +105,6 @@ public class ZyroSettingsFragment extends Fragment {
         card.setBackground(shape);
         card.setClickable(true);
         card.setFocusable(true);
-        card.setForeground(requireContext().getDrawable(android.R.drawable.list_selector_background));
 
         TextView index = label(number, 12, ACCENT, true);
         index.setGravity(Gravity.CENTER);
