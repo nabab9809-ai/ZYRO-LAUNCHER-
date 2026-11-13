@@ -47,9 +47,7 @@
         <TextView
             android:id="@+id/zyro_nav_home"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="7dp"
+            android:layout_height="38dp"
             android:gravity="center"
             android:text="HOME"
             android:textColor="@color/zyro_accent"
@@ -62,132 +60,29 @@
         <TextView
             android:id="@+id/zyro_nav_mods"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="7dp"
+            android:layout_height="38dp"
             android:gravity="center"
             android:text="MODS"
             android:textColor="@color/primary_text"
-            android:textSize="10sp"
+            android:textSize="9sp"
             android:fontFamily="@font/noto_sans_bold"
+            android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.10"
             android:background="@drawable/zyro_click_feedback" />
 
         <TextView
             android:id="@+id/zyro_nav_shaders"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="7dp"
+            android:layout_height="38dp"
             android:gravity="center"
             android:text="SHADERS"
-            android:textColor="@color/primary_text"
-            android:textSize="9sp"
-            android:fontFamily="@font/noto_sans_bold"
-            android:letterSpacing="0.08"
-            android:background="@drawable/zyro_click_feedback" />
-
-" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_app">
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/zyro_content_split"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.68" />
-
-    <LinearLayout
-        android:id="@+id/zyro_navigation_rail"
-        android:layout_width="88dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingTop="18dp"
-        android:paddingBottom="14dp"
-        android:background="@color/background_status_bar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/progress_layout"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ZYRO"
-            android:textColor="@color/primary_text"
-            android:textSize="19sp"
-            android:fontFamily="@font/noto_sans_bold"
-            android:textStyle="bold"
-            android:letterSpacing="0.12" />
-
-        <View
-            android:layout_width="30dp"
-            android:layout_height="2dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="26dp"
-            android:background="@color/zyro_accent" />
-
-        <TextView
-            android:id="@+id/zyro_nav_home"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="7dp"
-            android:gravity="center"
-            android:text="HOME"
-            android:textColor="@color/zyro_accent"
-            android:textSize="10sp"
-            android:fontFamily="@font/noto_sans_bold"
-            android:textStyle="bold"
-            android:letterSpacing="0.08"
-            android:background="@drawable/zyro_click_feedback" />
-
-        <TextView
-            android:id="@+id/zyro_nav_mods"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="7dp"
-            android:gravity="center"
-            android:text="MODS"
-            android:textColor="@color/primary_text"
-            android:textSize="10sp"
-            android:fontFamily="@font/noto_sans_bold"
-            android:letterSpacing="0.10"
-            android:background="@drawable/zyro_click_feedback" />
-
-        <TextView
-            android:id="@+id/zyro_nav_shaders"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="7dp"
-            android:gravity="center"
-            android:text="SHADERS"
-            android:textColor="@color/primary_text"
-            android:textSize="9sp"
-            android:fontFamily="@font/noto_sans_bold"
-            android:letterSpacing="0.08"
-            android:background="@drawable/zyro_click_feedback" />
-
-        <TextView
-            android:id="@+id/zyro_nav_resourcepacks"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:gravity="center"
-            android:text="RESOURCE\nPACKS"
             android:textColor="@color/primary_text"
             android:textSize="8sp"
-            android:letterSpacing="0.02"
-            android:background="?attr/selectableItemBackground" />
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.08"
+            android:background="@drawable/zyro_click_feedback" />
 
-        <View
+<View
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
@@ -248,6 +143,7 @@
         android:text="Microsoft or offline account"
         android:textColor="@color/secondary_text"
         android:textSize="10sp"
+            android:fontFamily="@font/noto_sans_bold"
         app:layout_constraintStart_toStartOf="@id/zyro_content_split"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zyro_account_heading" />
