@@ -42,8 +42,14 @@ public final class RustEngineLauncher {
 
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         ConfigurationInfo configuration = manager == null ? null : manager.getDeviceConfigurationInfo();
-        if (configuration == null || configuration.reqGlEsVersion < 0x00030000) {
-            Toast.makeText(activity, "Horizon Rust engine requires OpenGL ES 3.0 support.",
+        boolean supportsGles3 = configuration != null
+                && configuration.reqGlEsVersion >= 0x00030000;
+        boolean supportsVulkan = Build.VERSION.SDK_INT >= 24
+                && activity.getPackageManager().hasSystemFeature(
+                        PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL, 1);
+        if (!supportsGles3 && !supportsVulkan) {
+            Toast.makeText(activity,
+                    "Horizon Rust engine requires Vulkan or OpenGL ES 3.0 graphics support.",
                     Toast.LENGTH_LONG).show();
             return true;
         }
