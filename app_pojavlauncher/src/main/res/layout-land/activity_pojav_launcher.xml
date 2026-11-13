@@ -63,8 +63,9 @@
             android:text="MODS"
             android:textColor="@color/primary_text"
             android:textSize="9sp"
-            android:letterSpacing="0.04"
-            android:background="?attr/selectableItemBackground" />
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.10"
+            android:background="@drawable/zyro_click_feedback" />
 
         <TextView
             android:id="@+id/zyro_nav_shaders"
@@ -74,7 +75,8 @@
             android:text="SHADERS"
             android:textColor="@color/primary_text"
             android:textSize="8sp"
-            android:letterSpacing="0.02"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.08"
             android:background="?attr/selectableItemBackground" />
 
         <TextView
@@ -98,7 +100,7 @@
             android:layout_width="52dp"
             android:layout_height="46dp"
             android:layout_marginBottom="5dp"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/zyro_click_feedback"
             android:contentDescription="Settings"
             android:padding="12dp"
             android:src="@drawable/ic_menu_settings"
@@ -163,7 +165,7 @@
         android:gravity="center_vertical"
         android:padding="@dimen/_10sdp"
         android:dropDownWidth="wrap_content"
-        android:background="@color/zyro_surface"
+        android:background="@drawable/zyro_profile_selector"
         app:layout_constraintStart_toStartOf="@id/zyro_content_split"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zyro_account_hint" />
