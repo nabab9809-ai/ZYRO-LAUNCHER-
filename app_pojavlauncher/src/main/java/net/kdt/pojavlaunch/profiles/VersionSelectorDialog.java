@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog;
 
 import net.kdt.pojavlaunch.JMinecraftVersionList;
 import net.kdt.pojavlaunch.R;
-import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.tasks.AsyncVersionList;
 
@@ -45,7 +44,7 @@ public class VersionSelectorDialog {
                         .show();
                 return;
             }
-            Tools.runOnUiThread(() -> showVersions(context, hideCustomVersions, listener, result));
+            showVersions(context, hideCustomVersions, listener, result);
         }), false);
     }
 
