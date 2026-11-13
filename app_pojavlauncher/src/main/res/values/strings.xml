@@ -517,4 +517,7 @@
     <string name="angelica_found_sfpew_notice">Angelica mod found, Simple FPE Wrapper not needed</string>
     <string name="use_angle_checkbox">Use ANGLE (might help FPS)</string>
 
+    <string name="profile_engine_label">Game engine</string>
+    <string name="profile_engine_java">Java (Pojav)</string>
+    <string name="profile_engine_rust">Rust (Horizon)</string>
 </resources>
