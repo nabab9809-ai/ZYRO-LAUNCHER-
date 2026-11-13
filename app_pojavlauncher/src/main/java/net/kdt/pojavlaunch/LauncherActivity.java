@@ -498,12 +498,14 @@ public class LauncherActivity extends BaseActivity {
         TextView controls = findViewById(R.id.zyro_nav_controls);
         TextView java = findViewById(R.id.zyro_nav_java);
         TextView files = findViewById(R.id.zyro_nav_files);
+        TextView pulse = findViewById(R.id.zyro_nav_pulse);
         bindNavItem(home, () -> Tools.backToMainMenu(this));
         bindNavItem(mods, () -> Tools.swapFragment(this, SearchModFragment.class, SearchModFragment.TAG, null));
         bindNavItem(shaders, () -> openManagedFolder("shaderpacks"));
         bindNavItem(controls, () -> Tools.swapFragment(this, LauncherPreferenceControlFragment.class, "ZYRO_CONTROLS", null));
         bindNavItem(java, () -> Tools.swapFragment(this, LauncherPreferenceJavaFragment.class, "ZYRO_JAVA", null));
         bindNavItem(files, () -> openManagedFolder("."));
+        bindNavItem(pulse, () -> Tools.swapFragment(this, ZyroPulseFragment.class, "ZYRO_PULSE", null));
     }
 
     private void bindNavItem(View item, Runnable action) {
