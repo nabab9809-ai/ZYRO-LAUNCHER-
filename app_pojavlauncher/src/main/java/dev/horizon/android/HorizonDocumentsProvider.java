@@ -4,8 +4,10 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
+import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsProvider;
+import java.io.File;
 import java.io.FileNotFoundException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +27,20 @@ public final class HorizonDocumentsProvider extends DocumentsProvider {
             throws FileNotFoundException;
 
     @Override public boolean onCreate() {
+        // ZYRO still supports the Java launcher on older Android versions and
+        // non-ARM64 devices. Do not load an unavailable/API-28+ library here.
+        if (Build.VERSION.SDK_INT < 28) return false;
+        boolean arm64 = false;
+        for (String abi : Build.SUPPORTED_ABIS) {
+            if ("arm64-v8a".equals(abi)) {
+                arm64 = true;
+                break;
+            }
+        }
+        if (!arm64) return false;
+        File library = new File(getContext().getApplicationInfo().nativeLibraryDir,
+                "libhorizon_android.so");
+        if (!library.isFile()) return false;
         System.loadLibrary("horizon_android");
         return true;
     }
