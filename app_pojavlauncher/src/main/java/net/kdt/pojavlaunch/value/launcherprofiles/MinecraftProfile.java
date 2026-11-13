@@ -9,6 +9,8 @@ public class MinecraftProfile {
 	public static String LATEST_SNAPSHOT= "latest-snapshot";
 
 	public String name;
+	/** Selected game backend. Missing values in legacy launcher_profiles.json resolve to Java. */
+	public String gameEngine = GameEngine.JAVA;
 	public String type;
 	public String created;
 	public String lastUsed;
@@ -28,6 +30,7 @@ public class MinecraftProfile {
 	public static MinecraftProfile createTemplate(){
 		MinecraftProfile TEMPLATE = new MinecraftProfile();
 		TEMPLATE.name = "";
+		TEMPLATE.gameEngine = GameEngine.JAVA;
 		TEMPLATE.lastVersionId = LATEST_RELEASE;
 		return TEMPLATE;
 	}
@@ -35,6 +38,7 @@ public class MinecraftProfile {
 	public static MinecraftProfile getDefaultProfile(){
 		MinecraftProfile defaultProfile = new MinecraftProfile();
 		defaultProfile.name = "Default";
+		defaultProfile.gameEngine = GameEngine.JAVA;
 		defaultProfile.lastVersionId = "1.7.10";
 		return defaultProfile;
 	}
@@ -43,6 +47,7 @@ public class MinecraftProfile {
 
 	public MinecraftProfile(MinecraftProfile profile){
 		name = profile.name;
+		gameEngine = GameEngine.resolve(profile.gameEngine);
 		type = profile.type;
 		created = profile.created;
 		lastUsed = profile.lastUsed;
