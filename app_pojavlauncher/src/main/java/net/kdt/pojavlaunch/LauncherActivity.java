@@ -54,6 +54,8 @@ import net.kdt.pojavlaunch.modloaders.modpacks.api.NotificationDownloadListener;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.IconCacheJanitor;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
+import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceControlFragment;
+import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceJavaFragment;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.TaskCountListener;
 import net.kdt.pojavlaunch.services.ProgressServiceKeeper;
@@ -493,9 +495,15 @@ public class LauncherActivity extends BaseActivity {
         TextView home = findViewById(R.id.zyro_nav_home);
         TextView mods = findViewById(R.id.zyro_nav_mods);
         TextView shaders = findViewById(R.id.zyro_nav_shaders);
+        TextView controls = findViewById(R.id.zyro_nav_controls);
+        TextView java = findViewById(R.id.zyro_nav_java);
+        TextView files = findViewById(R.id.zyro_nav_files);
         bindNavItem(home, () -> Tools.backToMainMenu(this));
         bindNavItem(mods, () -> Tools.swapFragment(this, SearchModFragment.class, SearchModFragment.TAG, null));
         bindNavItem(shaders, () -> openManagedFolder("shaderpacks"));
+        bindNavItem(controls, () -> Tools.swapFragment(this, LauncherPreferenceControlFragment.class, "ZYRO_CONTROLS", null));
+        bindNavItem(java, () -> Tools.swapFragment(this, LauncherPreferenceJavaFragment.class, "ZYRO_JAVA", null));
+        bindNavItem(files, () -> openManagedFolder("."));
     }
 
     private void bindNavItem(View item, Runnable action) {
