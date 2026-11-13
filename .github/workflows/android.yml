@@ -121,7 +121,7 @@ jobs:
           if test -s ".local/horizon-client/$VERSION/horizon-resources.json"; then
             echo "Using cached generated Horizon data for Minecraft $VERSION"
           else
-            python3 tools/android_prepare.py
+            python3 ../../scripts/prepare_horizon_android.py
           fi
 
       - name: Compile and package Horizon into ZYRO
