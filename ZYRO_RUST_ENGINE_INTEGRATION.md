@@ -1,6 +1,6 @@
 # ZYRO Rust Engine Integration
 
-Status: profile metadata, a guarded Rust Play dispatcher and the Horizon NativeActivity manifest bridge are committed. The Horizon Rust source/native library/assets are not yet bundled, so Rust gameplay is not available in the APK.
+Status: Horizon's Android branch is now pinned as a Git submodule at `third_party/horizon` (upstream commit `150a414b09a18c900489d9462a7fc035dae744b7`). This tracks the real upstream source without copying or rewriting its history. The native library/assets are not yet built or packaged, so Rust gameplay is not available in the APK.
 
 ## Target
 
@@ -52,8 +52,10 @@ Android branch: `android`
       Existing profiles with no field resolve to Java.
 - [x] Audit the Android port's Gradle, Cargo/NDK, NativeActivity, generated
       assets and license requirements against this repository's build.
-- [ ] Bring the Android engine source into the repository with its upstream
-      history and required notices preserved.
+- [x] Register the upstream Android engine source as a Git submodule at
+      `third_party/horizon`, pinned to `150a414b09a18c900489d9462a7fc035dae744b7`.
+      Clone with submodules enabled to fetch the source tree; upstream history is preserved.
+- [ ] Vendor/merge the required Android notices, Java wrappers, provider and resources into ZYRO's app module.
 - [ ] Build and package the native engine for supported Android ABIs.
 - [x] Add the Horizon NativeActivity Java bridge, manifest registration and a
       guarded Play dispatcher. It reports a clear message until the native
@@ -104,3 +106,14 @@ A successful Gradle build or presence of a native library is not proof that
 Minecraft runs. The backend is complete only after the Rust client reaches a
 world and survives pause/resume, touch input, audio and shutdown on a real
 Android device.
+
+
+## Source pin
+
+ZYRO tracks Horizon's `android` branch as a Git submodule in `third_party/horizon`.
+The pin is the upstream commit `150a414b09a18c900489d9462a7fc035dae744b7`.
+This preserves upstream history and avoids a lossy source copy. A checkout must
+initialize submodules (`git submodule update --init --recursive`) before the
+Horizon Cargo workspace is available locally. This is source tracking, not a
+compiled or packaged engine: ZYRO still needs the Android build pipeline,
+resources and native library integration before Rust can launch.
