@@ -1,6 +1,6 @@
 # ZYRO Rust Engine Integration
 
-Status: profile-level backend metadata is committed and the Horizon Android packaging has been audited; the Rust runtime is not yet present in the ZYRO APK.
+Status: profile metadata, a guarded Rust Play dispatcher and the Horizon NativeActivity manifest bridge are committed. The Horizon Rust source/native library/assets are not yet bundled, so Rust gameplay is not available in the APK.
 
 ## Target
 
@@ -50,13 +50,18 @@ Android branch: `android`
 
 - [x] Add backward-compatible profile metadata for Java/Rust backend IDs.
       Existing profiles with no field resolve to Java.
-- [ ] Audit the Android port's Gradle, Cargo/NDK, NativeActivity, generated
+- [x] Audit the Android port's Gradle, Cargo/NDK, NativeActivity, generated
       assets and license requirements against this repository's build.
 - [ ] Bring the Android engine source into the repository with its upstream
       history and required notices preserved.
 - [ ] Build and package the native engine for supported Android ABIs.
-- [ ] Add the Rust backend launch Activity and lifecycle/input/surface bridge.
-- [ ] Add the profile editor control and Play-button backend dispatch (metadata alone does not launch Rust).
+- [x] Add the Horizon NativeActivity Java bridge, manifest registration and a
+      guarded Play dispatcher. It reports a clear message until the native
+      library is packaged; this is not a working Rust runtime yet.
+- [ ] Add the profile editor control so users can select Java or Rust without
+      manually editing profile JSON.
+- [ ] Complete the native lifecycle/input/surface bridge and verify it against
+      the packaged Horizon library.
 - [ ] Connect Rust-specific resource installation, account state, worlds and
       settings without conflating them with Java instances.
 - [ ] Build, install and test on physical devices; publish only after runtime
@@ -79,9 +84,13 @@ Rust library. Its Android packaging currently declares:
 ZYRO currently has one Android application module, AGP 9.3.1, compile SDK 37
 and min SDK 21. Therefore, adding only the Rust shared library or including
 Horizon as a second application module would not integrate it into the
-installed ZYRO app. The correct next step is to vendor the upstream Android
-source with its license/notices, adapt its Activity/provider/resources into
-ZYRO's existing app module, and connect the native build/staging pipeline.
+installed ZYRO app. The first integration scaffold is now present in ZYRO: its manifest registers
+`dev.horizon.android.HorizonActivity`, the Play handler routes Rust profiles to
+that Activity, and a guard checks Android API, ABI, OpenGL ES and the presence
+of `libhorizon_android.so`. The upstream Java Activity wrapper is adapted into
+the app module. The Horizon source, documents provider, native library, engine
+data, controls and notices still need to be brought in and built; without them
+the guard deliberately refuses to launch Rust.
 Rust availability must be disabled below API 28 and for unsupported ABIs;
 Java remains the fallback.
 
