@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -37,6 +38,8 @@ import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
 import net.kdt.pojavlaunch.fragments.MainMenuFragment;
+import net.kdt.pojavlaunch.fragments.SearchModFragment;
+import net.kdt.pojavlaunch.fragments.FileSelectorFragment;
 import net.kdt.pojavlaunch.fragments.MicrosoftLoginFragment;
 import net.kdt.pojavlaunch.fragments.SelectAuthFragment;
 import net.kdt.pojavlaunch.lifecycle.ContextAwareDoneListener;
@@ -332,6 +335,7 @@ public class LauncherActivity extends BaseActivity {
         ProgressKeeper.addTaskCountListener((mProgressServiceKeeper = new ProgressServiceKeeper(this)));
 
         mSettingsButton.setOnClickListener(mSettingButtonListener);
+        bindZyroNavigation();
         ProgressKeeper.addTaskCountListener(mProgressLayout);
         ExtraCore.addExtraListener(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
         ExtraCore.addExtraListener(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
@@ -483,6 +487,32 @@ public class LauncherActivity extends BaseActivity {
     }
 
     /** Stuff all the view boilerplate here */
+
+    private void bindZyroNavigation() {
+        TextView home = findViewById(R.id.zyro_nav_home);
+        TextView mods = findViewById(R.id.zyro_nav_mods);
+        TextView shaders = findViewById(R.id.zyro_nav_shaders);
+        TextView resourcePacks = findViewById(R.id.zyro_nav_resourcepacks);
+        home.setOnClickListener(v -> Tools.backToMainMenu(this));
+        mods.setOnClickListener(v -> Tools.swapFragment(this, SearchModFragment.class, SearchModFragment.TAG, null));
+        shaders.setOnClickListener(v -> openManagedFolder("shaderpacks"));
+        resourcePacks.setOnClickListener(v -> openManagedFolder("resourcepacks"));
+    }
+
+    private void openManagedFolder(String folderName) {
+        File folder = new File(Tools.DIR_GAME_NEW, folderName);
+        if (!folder.exists() && !folder.mkdirs()) {
+            Toast.makeText(this, "Unable to create " + folderName, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Bundle args = new Bundle();
+        args.putBoolean(FileSelectorFragment.BUNDLE_SELECT_FOLDER, true);
+        args.putBoolean(FileSelectorFragment.BUNDLE_SHOW_FILE, true);
+        args.putBoolean(FileSelectorFragment.BUNDLE_SHOW_FOLDER, true);
+        args.putString(FileSelectorFragment.BUNDLE_ROOT_PATH, folder.getAbsolutePath());
+        Tools.swapFragment(this, FileSelectorFragment.class, "ZYRO_" + folderName.toUpperCase(Locale.ROOT), args);
+    }
+
     private void bindViews(){
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
