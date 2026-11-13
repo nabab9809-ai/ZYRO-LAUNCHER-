@@ -60,6 +60,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="dev.horizon.android.HorizonActivity"
+            android:exported="false"
+            android:process=":game"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|keyboardHidden|keyboard|density|screenLayout"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@android:style/Theme.Material.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="horizon_android" />
+        </activity>
+        <activity
             android:name=".LauncherActivity"
             android:label="@string/app_short_name"
             android:windowSoftInputMode="adjustResize"
