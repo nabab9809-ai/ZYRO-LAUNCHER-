@@ -1,0 +1,87 @@
+name: Horizon Rust ARM64 build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [zyro-rust-engine-integration]
+    paths:
+      - 'third_party/horizon'
+      - '.github/workflows/horizon-rust-arm64.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: horizon-rust-arm64-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-arm64:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Checkout ZYRO and Horizon submodule
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Install Rust toolchain required by pinned Horizon source
+        run: |
+          rustup toolchain install 1.95.0 --profile minimal --component rustfmt
+          rustup target add aarch64-linux-android --toolchain 1.95.0
+          rustup default 1.95.0
+          rustc --version
+          cargo --version
+
+      - name: Install Android SDK, NDK and build tools
+        run: |
+          sdkmanager --install 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'
+          yes | sdkmanager --licenses >/dev/null
+
+      - name: Cache Rust dependencies and build output
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            third_party/horizon/target
+          key: horizon-android-arm64-${{ runner.os }}-${{ hashFiles('third_party/horizon/Cargo.lock', 'third_party/horizon/rust-toolchain.toml') }}-${{ github.sha }}
+          restore-keys: |
+            horizon-android-arm64-${{ runner.os }}-${{ hashFiles('third_party/horizon/Cargo.lock', 'third_party/horizon/rust-toolchain.toml') }}-
+
+      - name: Compile Horizon native Android library
+        working-directory: third_party/horizon
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+          CARGO_TARGET_DIR: ${{ github.workspace }}/third_party/horizon/target
+          CARGO_BUILD_JOBS: '2'
+        run: |
+          python3 tools/android_build.py --abi arm64-v8a --rust-only --public --profile release \
+            --sdk "$ANDROID_HOME" --java-home "$JAVA_HOME" --ndk-version 28.2.13676358 \
+            --build-tools-version 35.0.0
+
+      - name: Verify native library and publish build artifact
+        run: |
+          LIB=third_party/horizon/target/aarch64-linux-android/release/libhorizon_android.so
+          test -s "$LIB"
+          mkdir -p out
+          cp "$LIB" out/libhorizon_android.so
+          sha256sum out/libhorizon_android.so > out/SHA256SUMS.txt
+          printf 'Horizon source pin: %s\nZYRO branch: %s\n' \
+            "$(git -C third_party/horizon rev-parse HEAD)" "$GITHUB_REF_NAME" > out/BUILD-INFO.txt
+
+      - name: Upload ARM64 native library
+        uses: actions/upload-artifact@v4
+        with:
+          name: zyro-horizon-arm64-native
+          path: out/*
+          if-no-files-found: error
+          retention-days: 14
