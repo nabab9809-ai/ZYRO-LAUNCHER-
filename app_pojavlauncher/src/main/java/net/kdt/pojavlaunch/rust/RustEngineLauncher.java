@@ -10,6 +10,8 @@ import android.os.Build;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.zip.ZipInputStream;
 
 import dev.horizon.android.HorizonActivity;
 
@@ -60,6 +62,20 @@ public final class RustEngineLauncher {
         if (!nativeLibrary.isFile()) {
             Toast.makeText(activity,
                     "Rust engine is not bundled in this ZYRO build yet. Your Java engine is unchanged.",
+                    Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        // The native host expects a generated, public engine-data archive in
+        // the APK assets. Fail closed instead of opening a blank NativeActivity.
+        try (ZipInputStream data = new ZipInputStream(activity.getAssets().open("engine-data.zip"))) {
+            if (data.getNextEntry() == null) {
+                Toast.makeText(activity, "Rust engine data is missing from this ZYRO build.",
+                        Toast.LENGTH_LONG).show();
+                return true;
+            }
+        } catch (IOException error) {
+            Toast.makeText(activity, "Rust engine data is unavailable in this ZYRO build.",
                     Toast.LENGTH_LONG).show();
             return true;
         }
