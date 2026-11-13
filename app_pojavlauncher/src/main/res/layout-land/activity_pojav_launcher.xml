@@ -44,6 +44,7 @@
             android:background="@color/zyro_accent" />
 
         <TextView
+            android:id="@+id/zyro_nav_home"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:gravity="center"
@@ -53,6 +54,39 @@
             android:textStyle="bold"
             android:letterSpacing="0.08"
             android:background="@color/zyro_surface" />
+
+        <TextView
+            android:id="@+id/zyro_nav_mods"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center"
+            android:text="MODS"
+            android:textColor="@color/primary_text"
+            android:textSize="9sp"
+            android:letterSpacing="0.04"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/zyro_nav_shaders"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center"
+            android:text="SHADERS"
+            android:textColor="@color/primary_text"
+            android:textSize="8sp"
+            android:letterSpacing="0.02"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/zyro_nav_resourcepacks"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:gravity="center"
+            android:text="RESOURCE\nPACKS"
+            android:textColor="@color/primary_text"
+            android:textSize="8sp"
+            android:letterSpacing="0.02"
+            android:background="?attr/selectableItemBackground" />
 
         <View
             android:layout_width="match_parent"
