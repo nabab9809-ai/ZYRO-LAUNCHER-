@@ -60,8 +60,8 @@ Android branch: `android`
 - [x] Add the Horizon NativeActivity Java bridge, manifest registration and a
       guarded Play dispatcher. It reports a clear message until the native
       library is packaged; this is not a working Rust runtime yet.
-- [ ] Add the profile editor control so users can select Java or Rust without
-      manually editing profile JSON.
+- [x] Add the profile editor control so users can select Java or Rust without
+      manually editing profile JSON. The selection is saved per profile; legacy profiles remain Java.
 - [ ] Complete the native lifecycle/input/surface bridge and verify it against
       the packaged Horizon library.
 - [ ] Connect Rust-specific resource installation, account state, worlds and
@@ -93,8 +93,7 @@ of `libhorizon_android.so`. The upstream Java Activity wrapper is adapted into
 the app module. The Horizon source, documents provider, native library, engine
 data, controls and notices still need to be brought in and built; without them
 the guard deliberately refuses to launch Rust.
-Rust availability must be disabled below API 28 and for unsupported ABIs;
-Java remains the fallback.
+Rust availability must be disabled below API 28 and for unsupported ABIs or devices lacking both Vulkan 1.0 and OpenGL ES 3.0; Java remains the fallback. The launcher declares Vulkan as optional so Vulkan-only devices are not filtered out at install time.
 
 The source audit also confirms that Horizon targets Minecraft Java 26.3 and
 uses its own native `.hmod` mods and resource/world storage. It cannot be
@@ -117,3 +116,17 @@ initialize submodules (`git submodule update --init --recursive`) before the
 Horizon Cargo workspace is available locally. This is source tracking, not a
 compiled or packaged engine: ZYRO still needs the Android build pipeline,
 resources and native library integration before Rust can launch.
+
+
+## Latest integration fixes
+
+- Added a **Game engine** selector to the profile editor with **Java (Pojav)** and
+  **Rust (Horizon)** choices. The value is saved in each profile; older profile
+  JSON without the field continues to resolve to Java.
+- Corrected the Rust graphics capability gate: Vulkan 1.0-capable devices are
+  accepted as well as OpenGL ES 3.0 devices. Vulkan is declared optional in the
+  manifest so it does not block Java-only devices from installing ZYRO.
+- These changes improve selection and eligibility checks only. They do not
+  supply the missing Horizon native library, generated engine data, documents
+  provider/resources or runtime packaging. Rust gameplay is still unavailable
+  until those pieces are integrated and tested.
