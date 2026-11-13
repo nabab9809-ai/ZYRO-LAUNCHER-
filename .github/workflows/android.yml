@@ -102,6 +102,11 @@ jobs:
           restore-keys: |
             zyro-horizon-android-arm64-${{ runner.os }}-${{ hashFiles('third_party/horizon/Cargo.lock', 'third_party/horizon/rust-toolchain.toml') }}-
 
+      - name: Set up Python 3.11 for Horizon preparation
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Prepare public Horizon engine data
         working-directory: third_party/horizon
         run: |
