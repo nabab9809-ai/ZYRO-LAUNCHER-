@@ -77,7 +77,7 @@
         android:layout_marginStart="@dimen/_18sdp"
         android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:background="@drawable/zyro_profile_card"
+        android:background="@color/zyro_surface"
         android:drawableEnd="@drawable/spinner_arrow"
         android:drawablePadding="@dimen/_8sdp"
         android:elevation="2dp"
