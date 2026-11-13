@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.TextView;
@@ -492,11 +493,23 @@ public class LauncherActivity extends BaseActivity {
         TextView home = findViewById(R.id.zyro_nav_home);
         TextView mods = findViewById(R.id.zyro_nav_mods);
         TextView shaders = findViewById(R.id.zyro_nav_shaders);
-        TextView resourcePacks = findViewById(R.id.zyro_nav_resourcepacks);
-        home.setOnClickListener(v -> Tools.backToMainMenu(this));
-        mods.setOnClickListener(v -> Tools.swapFragment(this, SearchModFragment.class, SearchModFragment.TAG, null));
-        shaders.setOnClickListener(v -> openManagedFolder("shaderpacks"));
-        resourcePacks.setOnClickListener(v -> openManagedFolder("resourcepacks"));
+        bindNavItem(home, () -> Tools.backToMainMenu(this));
+        bindNavItem(mods, () -> Tools.swapFragment(this, SearchModFragment.class, SearchModFragment.TAG, null));
+        bindNavItem(shaders, () -> openManagedFolder("shaderpacks"));
+    }
+
+    private void bindNavItem(View item, Runnable action) {
+        item.setOnClickListener(v -> {
+            v.animate().cancel();
+            v.setScaleX(0.94f);
+            v.setScaleY(0.94f);
+            v.setAlpha(0.78f);
+            v.animate().scaleX(1f).scaleY(1f).alpha(1f)
+                    .setDuration(220)
+                    .setInterpolator(new OvershootInterpolator(1.25f))
+                    .start();
+            action.run();
+        });
     }
 
     private void openManagedFolder(String folderName) {
