@@ -1,6 +1,6 @@
 # ZYRO Rust Engine Integration
 
-Status: integration work started; no Rust engine is wired into the APK yet.
+Status: profile-level backend metadata is committed; no Rust engine is wired into the APK yet.
 
 ## Target
 
@@ -48,13 +48,15 @@ Android branch: `android`
 
 ## Integration sequence
 
+- [x] Add backward-compatible profile metadata for Java/Rust backend IDs.
+      Existing profiles with no field resolve to Java.
 - [ ] Audit the Android port's Gradle, Cargo/NDK, NativeActivity, generated
       assets and license requirements against this repository's build.
 - [ ] Bring the Android engine source into the repository with its upstream
       history and required notices preserved.
 - [ ] Build and package the native engine for supported Android ABIs.
 - [ ] Add the Rust backend launch Activity and lifecycle/input/surface bridge.
-- [ ] Add per-profile backend selection and Play dispatch.
+- [ ] Add the profile editor control and Play-button backend dispatch (metadata alone does not launch Rust).
 - [ ] Connect Rust-specific resource installation, account state, worlds and
       settings without conflating them with Java instances.
 - [ ] Build, install and test on physical devices; publish only after runtime
