@@ -7,6 +7,8 @@ on:
     paths:
       - 'third_party/horizon'
       - '.github/workflows/horizon-rust-arm64.yml'
+      - 'app_pojavlauncher/src/main/AndroidManifest.xml'
+      - 'app_pojavlauncher/src/main/java/dev/horizon/android/**'
 
 permissions:
   contents: read
@@ -59,8 +61,6 @@ jobs:
       - name: Compile Horizon native Android library
         working-directory: third_party/horizon
         env:
-          ANDROID_HOME: ${{ env.ANDROID_HOME }}
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
           CARGO_TARGET_DIR: ${{ github.workspace }}/third_party/horizon/target
           CARGO_BUILD_JOBS: '2'
         run: |
