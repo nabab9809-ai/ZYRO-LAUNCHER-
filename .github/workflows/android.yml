@@ -78,6 +78,52 @@ jobs:
           ./scripts/languagelist_updater.sh
           mkdir out
 
+      # Build and stage the actual Horizon runtime into ZYRO before Gradle packages the APK.
+      - name: Install Rust Android target and Horizon NDK
+        run: |
+          rustup toolchain install 1.95.0 --profile minimal
+          rustup target add aarch64-linux-android --toolchain 1.95.0
+          rustup default 1.95.0
+          SDKMANAGER=$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --install 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'
+          yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses >/dev/null
+          rustc --version
+          cargo --version
+
+      - name: Cache Horizon Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            third_party/horizon/target
+          key: zyro-horizon-android-arm64-${{ runner.os }}-${{ hashFiles('third_party/horizon/Cargo.lock', 'third_party/horizon/rust-toolchain.toml') }}-${{ github.sha }}
+          restore-keys: |
+            zyro-horizon-android-arm64-${{ runner.os }}-${{ hashFiles('third_party/horizon/Cargo.lock', 'third_party/horizon/rust-toolchain.toml') }}-
+
+      - name: Prepare public Horizon engine data
+        run: |
+          python3 tools/android_prepare.py
+
+      - name: Compile and package Horizon into ZYRO
+        working-directory: third_party/horizon
+        env:
+          CARGO_TARGET_DIR: ${{ github.workspace }}/third_party/horizon/target
+          CARGO_BUILD_JOBS: '2'
+        run: |
+          python3 tools/android_build.py --abi arm64-v8a --rust-only --public --profile release \\
+            --sdk "$ANDROID_HOME" --java-home "$JAVA_HOME" --ndk-version 28.2.13676358 \\
+            --build-tools-version 35.0.0
+          mkdir -p ../app_pojavlauncher/src/main/jniLibs/arm64-v8a
+          cp target/aarch64-linux-android/release/libhorizon_android.so \\
+            ../app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so
+          cd ..
+          python3 -c 'import runpy, shutil; f=runpy.run_path("third_party/horizon/tools/android_build.py"); shutil.copyfile(f["engine_data"](True), "app_pojavlauncher/src/main/assets/engine-data.zip")'
+          test -s app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so
+          test -s app_pojavlauncher/src/main/assets/engine-data.zip
+          sha256sum app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so app_pojavlauncher/src/main/assets/engine-data.zip
+
       - name: Build Debug .apk
         run: |
           # Build the installable test launcher first; it uses the project's debug key.
