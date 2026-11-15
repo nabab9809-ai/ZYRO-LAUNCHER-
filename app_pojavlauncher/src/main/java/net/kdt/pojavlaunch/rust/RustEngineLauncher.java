@@ -32,7 +32,7 @@ public final class RustEngineLauncher {
 
         boolean supportedAbi = false;
         for (String abi : Build.SUPPORTED_ABIS) {
-            if ("arm64-v8a".equals(abi) || "x86_64".equals(abi)) {
+            if ("arm64-v8a".equals(abi)) {
                 supportedAbi = true;
                 break;
             }
@@ -47,9 +47,11 @@ public final class RustEngineLauncher {
         ConfigurationInfo configuration = manager == null ? null : manager.getDeviceConfigurationInfo();
         boolean supportsGles3 = configuration != null
                 && configuration.reqGlEsVersion >= 0x00030000;
+        // Feature presence accepts Vulkan hardware level 0 as well as level 1.
+        // Level 0 already includes Android's base Vulkan requirements.
         boolean supportsVulkan = Build.VERSION.SDK_INT >= 24
                 && activity.getPackageManager().hasSystemFeature(
-                        PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL, 1);
+                        PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL);
         if (!supportsGles3 && !supportsVulkan) {
             Toast.makeText(activity,
                     "Horizon Rust engine requires Vulkan or OpenGL ES 3.0 graphics support.",
