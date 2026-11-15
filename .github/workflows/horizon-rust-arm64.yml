@@ -9,6 +9,10 @@ on:
       - '.github/workflows/horizon-rust-arm64.yml'
       - 'app_pojavlauncher/src/main/AndroidManifest.xml'
       - 'app_pojavlauncher/src/main/java/dev/horizon/android/**'
+      - 'app_pojavlauncher/src/main/java/net/kdt/pojavlaunch/LauncherActivity.java'
+      - 'app_pojavlauncher/src/main/java/net/kdt/pojavlaunch/rust/**'
+      - 'scripts/prepare_horizon_android.py'
+      - '.github/workflows/android.yml'
 
 permissions:
   contents: read
@@ -75,6 +79,13 @@ jobs:
         run: |
           LIB=third_party/horizon/target/aarch64-linux-android/release/libhorizon_android.so
           test -s "$LIB"
+          readelf -h "$LIB" | grep -F 'Machine:                           AArch64'
+          for symbol in \
+            Java_dev_horizon_android_HorizonDocumentsProvider_nativeCall \
+            Java_dev_horizon_android_HorizonDocumentsProvider_nativeOpen \
+            Java_dev_horizon_android_HorizonActivity_nativeDocumentResult; do
+            readelf --dyn-syms --wide "$LIB" | grep -F "$symbol"
+          done
           mkdir -p out
           cp "$LIB" out/libhorizon_android.so
           sha256sum out/libhorizon_android.so > out/SHA256SUMS.txt
