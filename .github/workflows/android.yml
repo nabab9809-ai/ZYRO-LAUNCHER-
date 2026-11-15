@@ -150,8 +150,15 @@ jobs:
               workspace / "app_pojavlauncher/src/main/assets/engine-data.zip",
           )
           PY
+          mkdir -p "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/horizon"
+          cp "$GITHUB_WORKSPACE/third_party/horizon/LICENSE" \
+            "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/horizon/LICENSE.txt"
+          cp "$GITHUB_WORKSPACE/third_party/horizon/THIRD_PARTY_NOTICES.md" \
+            "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/horizon/THIRD_PARTY_NOTICES.md"
           test -s "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so"
           test -s "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/engine-data.zip"
+          test -s "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/horizon/LICENSE.txt"
+          test -s "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/horizon/THIRD_PARTY_NOTICES.md"
           sha256sum "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/jniLibs/arm64-v8a/libhorizon_android.so" "$GITHUB_WORKSPACE/app_pojavlauncher/src/main/assets/engine-data.zip"
 
       - name: Build Debug .apk
@@ -164,10 +171,20 @@ jobs:
         run: |
           unzip -Z1 out/app-debug.apk | grep -Fx 'lib/arm64-v8a/libhorizon_android.so'
           unzip -Z1 out/app-debug.apk | grep -Fx 'assets/engine-data.zip'
+          unzip -Z1 out/app-debug.apk | grep -Fx 'assets/horizon/LICENSE.txt'
+          unzip -Z1 out/app-debug.apk | grep -Fx 'assets/horizon/THIRD_PARTY_NOTICES.md'
           unzip -p out/app-debug.apk assets/engine-data.zip > out/engine-data-check.zip
           unzip -t out/engine-data-check.zip
+          unzip -Z1 out/engine-data-check.zip | grep -Fx 'horizon-resources.json'
+          unzip -Z1 out/engine-data-check.zip | grep -Fx 'worldgen/blocks/structure-blocks.json'
           unzip -p out/app-debug.apk lib/arm64-v8a/libhorizon_android.so > out/horizon-check.so
           readelf -h out/horizon-check.so | grep -F 'Machine:                           AArch64'
+          for symbol in \
+            Java_dev_horizon_android_HorizonDocumentsProvider_nativeCall \
+            Java_dev_horizon_android_HorizonDocumentsProvider_nativeOpen \
+            Java_dev_horizon_android_HorizonActivity_nativeDocumentResult; do
+            readelf --dyn-syms --wide out/horizon-check.so | grep -F "$symbol"
+          done
           rm out/engine-data-check.zip out/horizon-check.so
 
       - name: Gen debug md5sum
@@ -179,8 +196,10 @@ jobs:
         with:
           name: app-debug (recommended)
           path: out/app-debug.*
+          if-no-files-found: error
 
       - name: Build Release .apk
+        if: ${{ env.GPLAY_KEYSTORE_PASSWORD != '' }}
         continue-on-error: true
         run: |
           # Release signing depends on the private upload keystore credentials.
