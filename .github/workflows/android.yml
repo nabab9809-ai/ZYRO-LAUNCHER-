@@ -179,7 +179,9 @@ jobs:
           unzip -Z1 out/engine-data-check.zip | grep -Fx 'worldgen/blocks/structure-blocks.json'
           unzip -p out/app-debug.apk lib/arm64-v8a/libhorizon_android.so > out/horizon-check.so
           readelf -h out/horizon-check.so | grep -F 'Machine:                           AArch64'
+          # NativeActivity requires this entry point before the Horizon UI can start.
           for symbol in \
+            ANativeActivity_onCreate \
             Java_dev_horizon_android_HorizonDocumentsProvider_nativeCall \
             Java_dev_horizon_android_HorizonDocumentsProvider_nativeOpen \
             Java_dev_horizon_android_HorizonActivity_nativeDocumentResult; do

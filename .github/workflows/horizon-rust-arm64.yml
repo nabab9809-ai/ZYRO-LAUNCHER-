@@ -80,7 +80,9 @@ jobs:
           LIB=third_party/horizon/target/aarch64-linux-android/release/libhorizon_android.so
           test -s "$LIB"
           readelf -h "$LIB" | grep -F 'Machine:                           AArch64'
+          # NativeActivity requires this entry point before the Horizon UI can start.
           for symbol in \
+            ANativeActivity_onCreate \
             Java_dev_horizon_android_HorizonDocumentsProvider_nativeCall \
             Java_dev_horizon_android_HorizonDocumentsProvider_nativeOpen \
             Java_dev_horizon_android_HorizonActivity_nativeDocumentResult; do
